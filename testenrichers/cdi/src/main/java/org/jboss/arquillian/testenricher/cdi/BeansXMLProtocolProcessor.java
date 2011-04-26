@@ -38,7 +38,6 @@ import org.jboss.shrinkwrap.impl.base.asset.ArchiveAsset;
  */
 public class BeansXMLProtocolProcessor implements ProtocolArchiveProcessor
 {
-
    /* (non-Javadoc)
     * @see org.jboss.arquillian.spi.client.deployment.ProtocolArchiveProcessor#process(org.jboss.arquillian.spi.TestDeployment, org.jboss.shrinkwrap.api.Archive)
     */
