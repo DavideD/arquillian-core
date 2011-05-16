@@ -63,7 +63,7 @@ public class ContainerRegistryCreator
       {
          if(
                (activeConfiguration != null && activeConfiguration.equals(container.getContainerName())) ||
-               (activeConfiguration == null && container.isDefault()))
+               (activeConfiguration == null))
          {
             reg.create(container, serviceLoader);            
          }

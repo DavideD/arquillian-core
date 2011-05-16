@@ -36,7 +36,7 @@ import org.jboss.arquillian.spi.client.deployment.TargetDescription;
  */
 public class LocalContainerRegistry implements ContainerRegistry
 {
-   private List<Container> containers;
+   private final List<Container> containers;
 
    public LocalContainerRegistry()
    {
@@ -69,10 +69,14 @@ public class LocalContainerRegistry implements ContainerRegistry
 //            containerClassLoader = LocalContainerRegistry.class.getClassLoader();
 //         }
 //            
+         
+         DeployableContainer<?> onlyOne = loader.onlyOne(DeployableContainer.class);
+         DeployableContainer<?> newOne = onlyOne.getClass().newInstance();
+         
          return addContainer(
                new ContainerImpl(
-                     definition.getContainerName(), 
-                     loader.onlyOne(DeployableContainer.class),
+                     definition.getContainerName(),
+                     newOne,
                      definition));
       }
       catch (Exception e) 
