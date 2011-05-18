@@ -30,7 +30,13 @@ public class LoadableExtensionLoaderTestCase
 {
 
    @Test
-   public void shouldBeAbleTo() throws Exception
+   public void shouldBeAbleToAddProviders() throws Exception
+   {
+      
+   }
+   
+   @Test
+   public void shouldBeAbleToExcludeProviders() throws Exception
    {
       
    }
