@@ -86,6 +86,8 @@ public interface TestRunnerAdaptor
     */
    void after(Object testInstance, Method testMethod, LifecycleMethodExecutor executor) throws Exception;
 
+   void rule(Object testInstance, Method testMethod, LifecycleMethodExecutor executor) throws Exception;
+
    /**
     * Activate a TestMethod execution.<br/>
     * This will trigger the Test event.
@@ -100,4 +102,5 @@ public interface TestRunnerAdaptor
     * Shutdown Arquillian cleanly.  
     */
    void shutdown();
+
 }

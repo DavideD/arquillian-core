@@ -23,15 +23,48 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
 import org.junit.runner.RunWith;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
 
 /*
- * Predfined TestClass 
+ * Predefined TestClass 
  */
 @RunWith(Arquillian.class)
 public class ArquillianClass1 
 {
+   @Rule
+   public MethodRule rule = new MethodRule()
+   {
+      @Override
+      public Statement apply(Statement base, FrameworkMethod method, Object target)
+      {
+         try
+         {
+            if (method.getAnnotation(ApplyRule.class) == null) 
+               return base;
+
+            final Statement statement = base;
+            return new Statement()
+            {
+               @Override
+               public void evaluate() throws Throwable
+               {
+                  wasCalled(Cycle.RULE);
+                  statement.evaluate();
+               }
+            };
+         }
+         catch (Throwable e)
+         {
+            throw new AssertionError(e.getMessage());
+         }
+      }
+   };
+
    @BeforeClass
    public static void beforeClass() throws Throwable
    {
@@ -57,6 +90,7 @@ public class ArquillianClass1
    }
 
    @Test
+   @ApplyRule
    public void shouldBeInvoked() throws Throwable 
    {
       wasCalled(Cycle.TEST);

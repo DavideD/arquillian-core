@@ -32,7 +32,6 @@ import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-
 /**
  * Verify the that JUnit integration adaptor fires the expected events even when Handlers are failing.
  *
@@ -42,6 +41,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class JUnitIntegrationTestCase extends JUnitTestBaseClass 
 {
+
    @Test
    public void shouldNotCallAnyMethodsWithoutLifecycleHandlers() throws Exception 
    {
@@ -52,7 +52,7 @@ public class JUnitIntegrationTestCase extends JUnitTestBaseClass
 
       Assert.assertTrue(result.wasSuccessful());
       assertCycle(0, Cycle.values());
-      
+
       verify(adaptor, times(1)).beforeSuite();
       verify(adaptor, times(1)).afterSuite();
    }

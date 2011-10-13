@@ -36,6 +36,7 @@ import org.jboss.arquillian.test.spi.event.suite.AfterSuite;
 import org.jboss.arquillian.test.spi.event.suite.Before;
 import org.jboss.arquillian.test.spi.event.suite.BeforeClass;
 import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
+import org.jboss.arquillian.test.spi.event.suite.Rule;
 import org.jboss.arquillian.test.spi.event.suite.Test;
 
 /**
@@ -102,7 +103,16 @@ public class EventTestRunnerAdaptor implements TestRunnerAdaptor
 
       manager.fire(new After(testInstance, testMethod, executor));
    }
-   
+
+   @Override
+   public void rule(Object testInstance, Method testMethod, LifecycleMethodExecutor executor)
+   {
+      Validate.notNull(testInstance, "TestInstance must be specified");
+      Validate.notNull(testMethod, "TestMethod must be specified");
+
+      manager.fire(new Rule(testInstance, testMethod, executor));
+   }
+
    public TestResult test(TestMethodExecutor testMethodExecutor) throws Exception
    {
       Validate.notNull(testMethodExecutor, "TestMethodExecutor must be specified");
@@ -126,4 +136,5 @@ public class EventTestRunnerAdaptor implements TestRunnerAdaptor
    {
       manager.shutdown();
    }
+
 }

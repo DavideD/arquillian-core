@@ -46,7 +46,7 @@ import org.mockito.stubbing.Answer;
  */
 public class JUnitTestBaseClass
 {
-   public static enum Cycle { BEFORE_CLASS, BEFORE, TEST,  AFTER, AFTER_CLASS }
+   public static enum Cycle { BEFORE_CLASS, BEFORE, TEST,  AFTER, AFTER_CLASS, RULE }
    
    /*
     * Setup / Clear the static callback info. 
@@ -109,7 +109,7 @@ public class JUnitTestBaseClass
             }
             else if(argument instanceof TestMethodExecutor)
             {
-               ((TestMethodExecutor)argument).invoke();               
+               ((TestMethodExecutor)argument).invoke();
             }
          }
          return null;
@@ -142,6 +142,7 @@ public class JUnitTestBaseClass
       doAnswer(new ExecuteLifecycle()).when(adaptor).afterClass(any(Class.class), any(LifecycleMethodExecutor.class));
       doAnswer(new ExecuteLifecycle()).when(adaptor).before(any(Object.class), any(Method.class), any(LifecycleMethodExecutor.class));
       doAnswer(new ExecuteLifecycle()).when(adaptor).after(any(Object.class), any(Method.class), any(LifecycleMethodExecutor.class));
+      doAnswer(new ExecuteLifecycle()).when(adaptor).rule(any(Object.class), any(Method.class), any(LifecycleMethodExecutor.class));
       doAnswer(new TestExecuteLifecycle(new TestResult(Status.PASSED))).when(adaptor).test(any(TestMethodExecutor.class));
    }
    

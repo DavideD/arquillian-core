@@ -27,6 +27,7 @@ import org.jboss.arquillian.test.spi.TestResult;
 import org.jboss.arquillian.test.spi.TestRunnerAdaptor;
 import org.jboss.arquillian.test.spi.TestRunnerAdaptorBuilder;
 import org.junit.internal.runners.model.MultipleFailureException;
+import org.junit.rules.MethodRule;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -196,7 +197,7 @@ public class Arquillian extends BlockJUnit4ClassRunner
          public void evaluate() throws Throwable
          {
             State.getTestAdaptor().before(
-                  target, 
+                  target,
                   method.getMethod(), 
                   new StatementLifecycleExecutor(onlyBefores));
             originalStatement.evaluate();
@@ -227,7 +228,37 @@ public class Arquillian extends BlockJUnit4ClassRunner
          }
       };
    }
-      
+
+   @Override
+   protected List<MethodRule> rules(Object test)
+   {
+      List<MethodRule> onlyRules = super.rules(test);
+      List<MethodRule> results = new ArrayList<MethodRule>();
+      for (MethodRule methodRule : onlyRules)
+      {
+         final MethodRule rule = methodRule;
+         results.add(new MethodRule()
+         {
+            @Override
+            public Statement apply(final Statement base, final FrameworkMethod method, final Object target)
+            {
+               return new Statement()
+               {
+                  @Override
+                  public void evaluate() throws Throwable
+                  {
+                     State.getTestAdaptor().rule(
+                           target,
+                           method.getMethod(),
+                           new StatementLifecycleExecutor(rule.apply(base, method, target)));
+                  }
+               };
+            }
+         });
+      }
+      return results;
+   }
+
    @Override
    protected Statement methodInvoker(final FrameworkMethod method, final Object test)
    {
@@ -327,4 +358,5 @@ public class Arquillian extends BlockJUnit4ClassRunner
          statement.evaluate();
       }
    }
+
 }

@@ -27,6 +27,7 @@ import org.jboss.arquillian.test.spi.event.suite.AfterClass;
 import org.jboss.arquillian.test.spi.event.suite.Before;
 import org.jboss.arquillian.test.spi.event.suite.BeforeClass;
 import org.jboss.arquillian.test.spi.event.suite.LifecycleEvent;
+import org.jboss.arquillian.test.spi.event.suite.Rule;
 import org.jboss.arquillian.test.spi.event.suite.TestLifecycleEvent;
 
 /**
@@ -74,6 +75,14 @@ public class ClientBeforeAfterLifecycleEventExecuter
    }
 
    public void on(@Observes(precedence = 100) After event) throws Throwable
+   {
+      if(isRunAsClient(event) || isLocalContainer())
+      {
+         execute(event);         
+      }
+   }
+
+   public void on(@Observes(precedence = 100) Rule event) throws Throwable
    {
       if(isRunAsClient(event) || isLocalContainer())
       {
